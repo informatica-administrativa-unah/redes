@@ -1,0 +1,265 @@
+# Soluciones de ejercicios/subneteo.yml
+# Antes de mirar, intentá cada ejercicio en papel. El paso a paso de casos parecidos está en
+# 03_Subneteo/teoria.md, 04_VLSM/teoria.md y 05_IPv6_basico/teoria.md.
+# Este archivo lo revisa el mismo programa: python herramientas/revisar.py --soluciones
+
+# ======================================================================
+# Nivel 1. Datos de una red a partir de una dirección con prefijo
+# ======================================================================
+
+# La PC de caja en Tegucigalpa tiene la dirección 192.168.10.37/24.
+# Sacá los datos de su red.
+e01:
+  red:          192.168.10.0
+  mascara:      255.255.255.0
+  broadcast:    192.168.10.255
+  primer_host:  192.168.10.1
+  ultimo_host:  192.168.10.254
+  hosts_utiles: 254
+
+# El servidor de inventario de San Pedro Sula usa 172.16.45.200/16.
+e02:
+  red:          172.16.0.0
+  mascara:      255.255.0.0
+  broadcast:    172.16.255.255
+  primer_host:  172.16.0.1
+  ultimo_host:  172.16.255.254
+  hosts_utiles: 65534
+
+# Una impresora de la bodega de La Ceiba tiene 192.168.20.77/26.
+e03:
+  red:          192.168.20.64
+  mascara:      255.255.255.192
+  broadcast:    192.168.20.127
+  primer_host:  192.168.20.65
+  ultimo_host:  192.168.20.126
+  hosts_utiles: 62
+
+# La laptop del gerente de ventas recibió 10.10.5.130/25 por DHCP.
+e04:
+  red:          10.10.5.128
+  mascara:      255.255.255.128
+  broadcast:    10.10.5.255
+  primer_host:  10.10.5.129
+  ultimo_host:  10.10.5.254
+  hosts_utiles: 126
+
+# La cámara IP de la entrada de Tegucigalpa tiene 192.168.1.100/28.
+e05:
+  red:          192.168.1.96
+  mascara:      255.255.255.240
+  broadcast:    192.168.1.111
+  primer_host:  192.168.1.97
+  ultimo_host:  192.168.1.110
+  hosts_utiles: 14
+
+# Un equipo de la red de la oficina central tiene 172.20.13.71/21.
+# Ojo: aquí el octeto interesante es el tercero.
+e06:
+  red:          172.20.8.0
+  mascara:      255.255.248.0
+  broadcast:    172.20.15.255
+  primer_host:  172.20.8.1
+  ultimo_host:  172.20.15.254
+  hosts_utiles: 2046
+
+# Un técnico dice que 10.0.0.255/23 no se puede usar en una PC porque termina en 255.
+# Sacá los datos de la red y fijate si tiene razón (la respuesta está en primer_host y ultimo_host).
+e07:
+  red:          10.0.0.0
+  mascara:      255.255.254.0
+  broadcast:    10.0.1.255
+  primer_host:  10.0.0.1
+  ultimo_host:  10.0.1.254
+  hosts_utiles: 510
+
+# ======================================================================
+# Nivel 2. ¿Están en la misma red?
+# ======================================================================
+
+# Dos PC de la misma oficina no se ven: 192.168.5.65 y 192.168.5.62, las dos con /26.
+# Sacá la red de cada una y respondé si están en la misma red (si o no).
+e08:
+  red_ip1:   192.168.5.64
+  red_ip2:   192.168.5.0
+  misma_red: no
+
+# En San Pedro Sula, 10.1.14.3 y 10.1.15.250 tienen máscara /23. ¿Están en la misma red?
+e09:
+  red_ip1:   10.1.14.0
+  red_ip2:   10.1.14.0
+  misma_red: si
+
+# ======================================================================
+# Nivel 3. Dividir una red en cierta cantidad de subredes
+# ======================================================================
+
+# La red 192.168.30.0/24 se tiene que dividir en 6 subredes iguales, una por departamento.
+# Usá el menor número de bits prestados que alcance.
+# subred_pedida es la tercera subred (la primera es la 1), en formato red/prefijo.
+e10:
+  prefijo:          27
+  mascara:          255.255.255.224
+  subredes:         8
+  hosts_por_subred: 30
+  subred_pedida:    192.168.30.64/27
+  broadcast_pedida: 192.168.30.95
+
+# La empresa tiene 172.16.0.0/16 y quiere 50 subredes iguales para crecer.
+# subred_pedida es la décima subred.
+e11:
+  prefijo:          22
+  mascara:          255.255.252.0
+  subredes:         64
+  hosts_por_subred: 1022
+  subred_pedida:    172.16.36.0/22
+  broadcast_pedida: 172.16.39.255
+
+# Un proveedor de internet reparte 10.0.0.0/8 en al menos 1000 subredes iguales.
+# subred_pedida es la quinta subred.
+e12:
+  prefijo:          18
+  mascara:          255.255.192.0
+  subredes:         1024
+  hosts_por_subred: 16382
+  subred_pedida:    10.1.0.0/18
+  broadcast_pedida: 10.1.63.255
+
+# ======================================================================
+# Nivel 4. Dividir según los hosts que necesita cada segmento
+# ======================================================================
+
+# Con 192.168.40.0/24 hay que armar segmentos de 50 hosts cada uno, lo más ajustados posible.
+# subredes es cuántos segmentos de ese tamaño caben en la /24.
+e13:
+  prefijo:          26
+  mascara:          255.255.255.192
+  hosts_por_subred: 62
+  subredes:         4
+
+# Con 172.18.0.0/16 hay que armar segmentos de 500 hosts cada uno.
+e14:
+  prefijo:          23
+  mascara:          255.255.254.0
+  hosts_por_subred: 510
+  subredes:         128
+
+# Con 192.168.50.0/24 hay que armar enlaces punto a punto entre routers (2 hosts cada uno).
+e15:
+  prefijo:          30
+  mascara:          255.255.255.252
+  hosts_por_subred: 2
+  subredes:         64
+
+# ======================================================================
+# Nivel 5. VLSM
+# ======================================================================
+
+# VLSM en Tegucigalpa con 192.168.100.0/24:
+# ventas 60 hosts, bodega 28, administracion 12, y dos enlaces WAN de 2 hosts.
+# Asigná de la red más grande a la más chica, cada una pegada a la anterior.
+# Las redes van como red/prefijo y el gateway es el primer host.
+e16:
+  ventas_red:               192.168.100.0/26
+  ventas_gateway:           192.168.100.1
+  ventas_broadcast:         192.168.100.63
+  bodega_red:               192.168.100.64/27
+  bodega_gateway:           192.168.100.65
+  bodega_broadcast:         192.168.100.95
+  administracion_red:       192.168.100.96/28
+  administracion_gateway:   192.168.100.97
+  administracion_broadcast: 192.168.100.111
+  wan1_red:                 192.168.100.112/30
+  wan1_gateway:             192.168.100.113
+  wan1_broadcast:           192.168.100.115
+  wan2_red:                 192.168.100.116/30
+  wan2_gateway:             192.168.100.117
+  wan2_broadcast:           192.168.100.119
+
+# VLSM para toda Comercial El Guayabo con 172.16.32.0/22:
+# tegucigalpa 200 hosts, san_pedro_sula 120, la_ceiba 50, servidores 20,
+# y tres enlaces WAN de 2 hosts: wan_tgu_sps, wan_tgu_lce, wan_sps_lce (asignalos en ese orden).
+e17:
+  tegucigalpa_red:          172.16.32.0/24
+  tegucigalpa_gateway:      172.16.32.1
+  tegucigalpa_broadcast:    172.16.32.255
+  san_pedro_sula_red:       172.16.33.0/25
+  san_pedro_sula_gateway:   172.16.33.1
+  san_pedro_sula_broadcast: 172.16.33.127
+  la_ceiba_red:             172.16.33.128/26
+  la_ceiba_gateway:         172.16.33.129
+  la_ceiba_broadcast:       172.16.33.191
+  servidores_red:           172.16.33.192/27
+  servidores_gateway:       172.16.33.193
+  servidores_broadcast:     172.16.33.223
+  wan_tgu_sps_red:          172.16.33.224/30
+  wan_tgu_sps_gateway:      172.16.33.225
+  wan_tgu_sps_broadcast:    172.16.33.227
+  wan_tgu_lce_red:          172.16.33.228/30
+  wan_tgu_lce_gateway:      172.16.33.229
+  wan_tgu_lce_broadcast:    172.16.33.231
+  wan_sps_lce_red:          172.16.33.232/30
+  wan_sps_lce_gateway:      172.16.33.233
+  wan_sps_lce_broadcast:    172.16.33.235
+
+# VLSM con 10.20.0.0/23 para la oficina nueva:
+# contabilidad 25 hosts, ventas 100, gerencia 6, bodega 60, wifi_invitados 100.
+# La lista no viene ordenada. Si dos piden lo mismo, va primero el que aparece antes en la lista.
+e18:
+  ventas_red:               10.20.0.0/25
+  ventas_gateway:           10.20.0.1
+  ventas_broadcast:         10.20.0.127
+  wifi_invitados_red:       10.20.0.128/25
+  wifi_invitados_gateway:   10.20.0.129
+  wifi_invitados_broadcast: 10.20.0.255
+  bodega_red:               10.20.1.0/26
+  bodega_gateway:           10.20.1.1
+  bodega_broadcast:         10.20.1.63
+  contabilidad_red:         10.20.1.64/27
+  contabilidad_gateway:     10.20.1.65
+  contabilidad_broadcast:   10.20.1.95
+  gerencia_red:             10.20.1.96/29
+  gerencia_gateway:         10.20.1.97
+  gerencia_broadcast:       10.20.1.103
+
+# ======================================================================
+# Nivel 6. Wildcard y sumarización de rutas
+# ======================================================================
+
+# Wildcard para una ACL que cubra una red con máscara 255.255.255.224.
+e19:
+  wildcard: 0.0.0.31
+
+# Wildcard para la máscara 255.255.252.0.
+e20:
+  wildcard: 0.0.3.255
+
+# Tegucigalpa tiene 192.168.16.0/24, 192.168.17.0/24, 192.168.18.0/24 y 192.168.19.0/24.
+# Escribí una sola ruta resumida que las cubra todas, sin cubrir de más.
+e21:
+  resumen: 192.168.16.0/22
+
+# San Pedro Sula tiene de 172.16.8.0/24 hasta 172.16.15.0/24 (ocho redes seguidas). Escribí la ruta resumida.
+e22:
+  resumen: 172.16.8.0/21
+
+# ======================================================================
+# Nivel 7. IPv6
+# ======================================================================
+
+# Abreviá al máximo 2001:0db8:0000:0000:0000:ff00:0042:8329
+e23:
+  abreviada: 2001:db8::ff00:42:8329
+
+# Abreviá al máximo 2001:0db8:0000:0000:0001:0000:0000:0001
+# Ojo: hay dos grupos de ceros del mismo largo.
+e24:
+  abreviada: 2001:db8::1:0:0:1
+
+# Escribí completa (8 grupos de 4 dígitos) la dirección 2001:db8:acad:1::1
+e25:
+  expandida: 2001:0db8:acad:0001:0000:0000:0000:0001
+
+# La PC de gerencia tiene 2001:db8:acad:12:a1b2::7/64. ¿Cuál es su red? Formato red/prefijo.
+e26:
+  red: 2001:db8:acad:12::/64

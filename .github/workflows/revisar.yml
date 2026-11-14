@@ -1,0 +1,29 @@
+# Corre el revisor de subneteo en cada push y en cada pull request.
+# En tu copia (hecha con "Use this template" o con fork) revisa ejercicios/subneteo.yml.
+# En el repo original revisa soluciones/subneteo.yml, porque ahí los ejercicios están vacíos.
+name: Revisar subneteo
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Revisar las soluciones (repo original)
+        if: github.repository == 'informatica-administrativa-unah/redes'
+        run: python herramientas/revisar.py --soluciones
+
+      - name: Revisar tus respuestas
+        if: github.repository != 'informatica-administrativa-unah/redes'
+        run: python herramientas/revisar.py

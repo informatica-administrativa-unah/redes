@@ -1,0 +1,36 @@
+name: Bienvenida
+
+# Saluda a quien abre su primer issue o pull request en este repo.
+# Usa pull_request_target para poder comentar en PRs que vienen de forks,
+# pero NO descarga ni ejecuta código del PR: solo deja un comentario.
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  saludar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v3
+        with:
+          issue_message: |
+            Gracias por abrir tu primer issue en la comunidad 🙌
+
+            Si es una duda sobre un tema, también podés preguntar en Discussions, ahí la ven más compañeros: https://github.com/orgs/informatica-administrativa-unah/discussions
+
+            Si reportás un error en el material, decinos el archivo y qué esperabas ver. Lo revisamos y te contestamos aquí mismo.
+          pr_message: |
+            Gracias por tu primer pull request 🎉
+
+            Así sigue el proceso:
+            1. Si el repo tiene corrector automático, revisá que el check salga en verde. Si sale rojo, abrí el detalle para ver qué falló.
+            2. Quien administra la organización revisa tu cambio y te puede pedir ajustes en los comentarios.
+            3. Cuando esté aprobado, se une al material y tu nombre queda en el historial del repo.
+
+            Cualquier duda, preguntá aquí mismo.
